@@ -2782,8 +2782,7 @@ static int MenuSettingsMappingsController()
  * ButtonMappingWindow
  ***************************************************************************/
 
-static u32
-ButtonMappingWindow()
+static u32 ButtonMappingWindow()
 {
 	GuiWindow promptWindow(448,288);
 	promptWindow.SetAlignment(ALIGN_CENTRE, ALIGN_MIDDLE);
@@ -3389,6 +3388,8 @@ static int MenuSettingsVideo()
 	sprintf(options.name[i++], "Show Framerate");
 	sprintf(options.name[i++], "Show Local Time");
 	sprintf(options.name[i++], "SuperFX Overclock");
+	sprintf(options.name[i++], "Enable Turbo Mode");
+	sprintf(options.name[i++], "Turbo Mode Button");
 	options.length = i;
 	
 #ifdef HW_DOL
@@ -3497,6 +3498,16 @@ static int MenuSettingsVideo()
 				S9xResetSuperFX();
 				S9xReset();
 				break;
+			case 10:
+				GCSettings.TurboModeEnabled++;
+				if (GCSettings.TurboModeEnabled > 1)
+					GCSettings.TurboModeEnabled = 0;
+				break;
+			case 11:
+				GCSettings.TurboModeButton++;
+				if (GCSettings.TurboModeButton > 14)
+					GCSettings.TurboModeButton = 0;
+				break;
 		}
 
 		if(ret >= 0 || firstRun)
@@ -3551,6 +3562,42 @@ static int MenuSettingsVideo()
 				case 3:
 					sprintf (options.value[9], "60 MHz"); break;
 			}
+			sprintf (options.value[10], "%s", GCSettings.TurboModeEnabled == 1 ? "On" : "Off");
+			
+			switch(GCSettings.TurboModeButton)
+			{
+				case 0:
+					sprintf (options.value[11], "Right Stick (default)"); break;
+				case 1:
+					sprintf (options.value[11], "A"); break;
+				case 2:
+					sprintf (options.value[11], "B"); break;
+				case 3:
+					sprintf (options.value[11], "X"); break;
+				case 4:
+					sprintf (options.value[11], "Y"); break;
+				case 5:
+					sprintf (options.value[11], "L"); break;
+				case 6:
+					sprintf (options.value[11], "R"); break;
+				case 7:
+					sprintf (options.value[11], "ZL"); break;
+				case 8:
+					sprintf (options.value[11], "ZR"); break;
+				case 9:
+					sprintf (options.value[11], "Z"); break;
+				case 10:
+					sprintf (options.value[11], "C"); break;
+				case 11:
+					sprintf (options.value[11], "1"); break;
+				case 12:
+					sprintf (options.value[11], "2"); break;
+				case 13:
+					sprintf (options.value[11], "Plus"); break;
+				case 14:
+					sprintf (options.value[11], "Minus"); break;
+			}
+
 			optionBrowser.TriggerUpdate();
 		}
 
