@@ -526,6 +526,8 @@ static void decodepad (int chan, int emuChan)
 
 	s8 pad_x = userInput[chan].pad.stickX;
 	s8 pad_y = userInput[chan].pad.stickY;
+	s8 pad_rightx = userInput[chan].pad.substickX;
+	s8 pad_righty = userInput[chan].pad.substickY;
 	u32 jp = userInput[chan].pad.btns_h;
 
 #ifdef HW_RVL
@@ -559,6 +561,15 @@ static void decodepad (int chan, int emuChan)
 		jp |= PAD_BUTTON_LEFT;
 	else if (pad_x > ANALOG_SENSITIVITY)
 		jp |= PAD_BUTTON_RIGHT;
+
+	if (pad_righty > ANALOG_SENSITIVITY)
+		jp |= PAD_BUTTON_X;
+	else if (pad_righty < -ANALOG_SENSITIVITY)
+		jp |= PAD_BUTTON_B;
+	if (pad_rightx < -ANALOG_SENSITIVITY)
+		jp |= PAD_BUTTON_Y;
+	else if (pad_rightx > ANALOG_SENSITIVITY)
+		jp |= PAD_BUTTON_A;
 
 	// Count as pressed if down far enough (~50% down)
 	if (userInput[chan].pad.triggerL > 0x80)
