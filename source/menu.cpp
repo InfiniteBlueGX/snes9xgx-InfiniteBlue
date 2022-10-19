@@ -1184,10 +1184,10 @@ static void ControllerWindowUpdate(void * ptr, int dir)
 	{
 		GCSettings.Controller += dir;
 
-		if(GCSettings.Controller > CTRL_PAD4)
-			GCSettings.Controller = CTRL_MOUSE;
-		if(GCSettings.Controller < CTRL_MOUSE)
-			GCSettings.Controller = CTRL_PAD4;
+		if(GCSettings.Controller > CTRL_MOUSE_BOTH)
+			GCSettings.Controller = CTRL_SCOPE;
+		if(GCSettings.Controller < CTRL_SCOPE)
+			GCSettings.Controller = CTRL_MOUSE_BOTH;
 
 		settingText->SetText(ctrlName[GCSettings.Controller]);
 		b->ResetState();

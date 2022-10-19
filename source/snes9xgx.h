@@ -52,16 +52,18 @@ enum {
 enum
 {
 	CTRL_PAD,
-	CTRL_MOUSE,
 	CTRL_SCOPE,
 	CTRL_JUST,
 	CTRL_PAD2,
 	CTRL_PAD4,
+	CTRL_MOUSE,
+	CTRL_MOUSE2,
+	CTRL_MOUSE_BOTH,
 	CTRL_LENGTH
 };
 
-const char ctrlName[6][24] =
-{ "SNES Controller", "SNES Mouse", "Super Scope", "Justifier", "SNES Controllers (2)", "SNES Controllers (4)" };
+const char ctrlName[8][24] =
+{ "SNES Controller", "Super Scope", "Justifier", "SNES Controllers (2)", "SNES Controllers (4)", "SNES Mouse (Port 1)", "SNES Mouse (Port 2)", "SNES Mouse (Both Ports)"};
 
 enum {
 	TURBO_BUTTON_RSTICK = 0,

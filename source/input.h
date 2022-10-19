@@ -23,7 +23,7 @@
 #define WIIDRCCAL		20
 #define MAXJP 			12 // # of mappable controller buttons
 
-extern u32 btnmap[4][6][12];
+extern u32 btnmap[6][6][12];
 extern int rumbleRequest[4];
 extern int playerMapping[4];
 

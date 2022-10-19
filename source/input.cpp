@@ -68,7 +68,7 @@ static int cursor_y[5] = {0,0,0,0,0};
 	  S9xMapButton( keycode, cmd = S9xGetCommandT(snescmd), false)
 
 static int scopeTurbo = 0; // tracks whether superscope turbo is on or off
-u32 btnmap[4][6][12]; // button mapping
+u32 btnmap[6][6][12]; // button mapping
 
 void ResetControls(int consoleCtrl, int wiiCtrl)
 {
@@ -695,7 +695,7 @@ static void decodepad (int chan, int emuChan)
 		S9xReportPointer(offset, (u16) cursor_x[0], (u16) cursor_y[0]);
 	}
 	/*** Mouse ***/
-	else if (Settings.MouseMaster && emuChan == 0)
+	else if (Settings.MouseMaster && emuChan < 2)
 	{
 		// buttons
 		offset = 0x60 + (2 * emuChan);
@@ -949,8 +949,21 @@ void SetControllers()
 	}
 	else if (Settings.MouseMaster == true)
 	{
-		S9xSetController (0, CTL_MOUSE, 0, 0, 0, 0);
-		S9xSetController (1, CTL_JOYPAD, 1, 0, 0, 0);
+		if (GCSettings.Controller == CTRL_MOUSE)
+		{
+			S9xSetController (0, CTL_MOUSE, 0, 0, 0, 0);
+			S9xSetController (1, CTL_JOYPAD, 1, 0, 0, 0);
+		}
+		else if (GCSettings.Controller == CTRL_MOUSE2)
+		{
+			S9xSetController (0, CTL_JOYPAD, 0, 0, 0, 0);
+			S9xSetController (1, CTL_MOUSE, 1, 0, 0, 0);
+		}
+		else if (GCSettings.Controller == CTRL_MOUSE_BOTH)
+		{
+			S9xSetController (0, CTL_MOUSE, 0, 0, 0, 0);
+			S9xSetController (1, CTL_MOUSE, 1, 0, 0, 0);
+		}	
 	}
 	else if (Settings.JustifierMaster == true)
 	{
