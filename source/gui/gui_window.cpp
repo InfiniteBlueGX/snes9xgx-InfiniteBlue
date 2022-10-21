@@ -10,11 +10,14 @@
 
 #include "gui.h"
 
+bool ignoreToggle = false;
+
 GuiWindow::GuiWindow()
 {
 	width = 0;
 	height = 0;
 	focus = 0; // allow focus
+	ignoreToggle = false;
 }
 
 GuiWindow::GuiWindow(int w, int h)
@@ -22,6 +25,7 @@ GuiWindow::GuiWindow(int w, int h)
 	width = w;
 	height = h;
 	focus = 0; // allow focus
+	ignoreToggle = false;
 }
 
 GuiWindow::~GuiWindow()
@@ -161,14 +165,24 @@ void GuiWindow::SetVisible(bool v)
 	}
 }
 
+void GuiWindow::SetIgnoreToggle(bool t)
+{
+	ignoreToggle = t;
+}
+
 void GuiWindow::SetFocus(int f)
 {
 	focus = f;
 
-	if(f == 1)
+	if(f == 1 && !ignoreToggle)
+	{
 		this->MoveSelectionVert(1);
+	}
 	else
+	{
 		this->ResetState();
+	}
+		
 }
 
 void GuiWindow::ChangeFocus(GuiElement* e)
