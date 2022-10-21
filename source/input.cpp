@@ -379,11 +379,13 @@ UpdatePads()
  * Sets up userInput triggers for use
  ***************************************************************************/
 static bool soundSync = false;
+static bool turboMute = false;
 
 void
 SetupPads()
 {
 	soundSync = Settings.SoundSync;
+	turboMute = GCSettings.MuteTurbo;
 	PAD_Init();
 
 	#ifdef HW_RVL
@@ -910,11 +912,14 @@ void ReportButtons ()
 		Settings.TurboMode = IsTurboModeInputPressed();
 	}
 	
-	if(Settings.TurboMode) {
+	if(Settings.TurboMode)
+	{
 		Settings.SoundSync = false;
+		Settings.Mute = GCSettings.MuteTurbo;
 	}
 	else {
 		Settings.SoundSync = soundSync;
+		Settings.Mute = turboMute;
 	}
 
 	/* Check for menu:

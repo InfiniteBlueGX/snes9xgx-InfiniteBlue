@@ -3839,6 +3839,8 @@ static int MenuSettingsAudio()
 	bool firstRun = true;
 	OptionList options;
 	sprintf(options.name[i++], "Interpolation");
+	sprintf(options.name[i++], "Mute Game Audio");
+	sprintf(options.name[i++], "Mute Turbo Mode");
 	options.length = i;
 	for(i=0; i < options.length; i++)
 		options.value[i][0] = 0;
@@ -3905,6 +3907,14 @@ static int MenuSettingsAudio()
 				}
 				break;
 				S9xReset();
+
+			case 1:
+				GCSettings.MuteAudio ^= 1;
+				break;
+
+			case 2:
+				GCSettings.MuteTurbo ^= 1;
+				break;
 		}
 		
 	if(ret >= 0 || firstRun)
@@ -3924,6 +3934,10 @@ static int MenuSettingsAudio()
 				case 4:
 					sprintf (options.value[0], "None"); break;
 			}
+
+			sprintf (options.value[1], "%s", GCSettings.MuteAudio ? "On" : "Off");
+			sprintf (options.value[2], "%s", GCSettings.MuteTurbo ? "On" : "Off");
+
 			optionBrowser.TriggerUpdate();
 		}
 		if(backBtn.GetState() == STATE_CLICKED)

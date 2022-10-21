@@ -157,6 +157,8 @@ preparePrefsData ()
 	createXMLSetting("yshift", "Vertical Video Shift", toStr(GCSettings.yshift));
 	createXMLSetting("sfxOverclock", "SuperFX Overclock", toStr(GCSettings.sfxOverclock));
 	createXMLSetting("Interpolation", "Interpolation", toStr(GCSettings.Interpolation));
+	createXMLSetting("MuteAudio", "Mute", toStr(GCSettings.MuteAudio));
+	createXMLSetting("MuteTurbo", "Mute Turbo Mode", toStr(GCSettings.MuteTurbo));
 	createXMLSetting("TurboModeEnabled", "Turbo Mode Enabled", toStr(GCSettings.TurboModeEnabled));
 	createXMLSetting("TurboModeButton", "Turbo Mode Button", toStr(GCSettings.TurboModeButton));
 	createXMLSetting("GamepadMenuToggle", "Gamepad Menu Toggle", toStr(GCSettings.GamepadMenuToggle));
@@ -355,6 +357,8 @@ decodePrefsData ()
 			// Audio Settings
 			
 			loadXMLSetting(&GCSettings.Interpolation, "Interpolation");
+			loadXMLSetting(&GCSettings.MuteAudio, "MuteAudio");
+			loadXMLSetting(&GCSettings.MuteTurbo, "MuteTurbo");
 
 			// Emulation Settings
 
@@ -516,8 +520,8 @@ DefaultSettings ()
 	Settings.SoundInputRate = 31920;
 	Settings.DynamicRateControl = true;
 	Settings.SeparateEchoBuffer = false;
-	
-	// Interpolation Method
+	GCSettings.MuteAudio = 0;
+	GCSettings.MuteTurbo = 0;
 	GCSettings.Interpolation = 0;
 	Settings.InterpolationMethod = DSP_INTERPOLATION_GAUSSIAN;
 
