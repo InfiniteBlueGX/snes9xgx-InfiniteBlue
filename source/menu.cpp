@@ -95,6 +95,7 @@ static char progressTitle[101];
 static char progressMsg[201];
 static int progressDone = 0;
 static int progressTotal = 0;
+static bool cancel;
 
 u8 * bg_music;
 u32 bg_music_size;
@@ -2905,8 +2906,9 @@ ButtonMappingWindow()
 	ResumeGui();
 
 	u32 pressed = 0;
+	
 
-	while(pressed == 0)
+	while(pressed == 0 && !cancel)
 	{
 		usleep(THREAD_SLEEP);
 
@@ -2922,10 +2924,20 @@ ButtonMappingWindow()
 
 			if(userInput[0].wpad->btns_d == WPAD_BUTTON_HOME)
 				pressed = WPAD_BUTTON_HOME;
+
+			if(userInput[0].wpad->btns_d & WPAD_CLASSIC_BUTTON_B ||
+				userInput[0].wpad->btns_d & WPAD_BUTTON_B ||
+				userInput[0].wiidrcdata.btns_d & WIIDRC_BUTTON_B)
+			cancel = true; // Cancel the dialog with a B/1 button press if accessed by a different controller type
 		}
 		else if(mapMenuCtrl == CTRLR_WIIDRC)
 		{
 			pressed = userInput[0].wiidrcdata.btns_d;
+
+			if(userInput[0].wpad->btns_d & WPAD_CLASSIC_BUTTON_B ||
+				userInput[0].wpad->btns_d & WPAD_BUTTON_B ||
+				userInput[0].pad.btns_d & PAD_BUTTON_B)
+			cancel = true; // Cancel the dialog with a B/1 button press if accessed by a different controller type
 		}
 		else
 		{
@@ -2939,6 +2951,8 @@ ButtonMappingWindow()
 					case CTRLR_WIIMOTE:
 						if(pressed > 0x1000)
 							pressed = 0; // not a valid input
+						else if(userInput[0].pad.btns_d & PAD_BUTTON_B || userInput[0].wiidrcdata.btns_d & WIIDRC_BUTTON_B)
+							cancel = true;
 						break;
 
 					case CTRLR_CLASSIC:
@@ -2946,20 +2960,30 @@ ButtonMappingWindow()
 							pressed = 0; // not a valid input
 						else if(pressed <= 0x1000)
 							pressed = 0;
+						else if(userInput[0].pad.btns_d & PAD_BUTTON_B || userInput[0].wiidrcdata.btns_d & WIIDRC_BUTTON_B)
+							cancel = true;
 						break;
+
 					case CTRLR_WUPC:
 						if(userInput[0].wpad->exp.type != WPAD_EXP_CLASSIC && userInput[0].wpad->exp.classic.type == 2)
 							pressed = 0; // not a valid input
 						else if(pressed <= 0x1000)
 							pressed = 0;
+						else if(userInput[0].pad.btns_d & PAD_BUTTON_B || userInput[0].wiidrcdata.btns_d & WIIDRC_BUTTON_B)
+							cancel = true;
 						break;
 
 					case CTRLR_NUNCHUK:
 						if(userInput[0].wpad->exp.type != WPAD_EXP_NUNCHUK)
 							pressed = 0; // not a valid input
+						else if(userInput[0].pad.btns_d & PAD_BUTTON_B || userInput[0].wiidrcdata.btns_d & WIIDRC_BUTTON_B)
+							cancel = true;
 						break;
 				}
 			}
+
+			if(userInput[0].pad.btns_d & PAD_BUTTON_B || userInput[0].wiidrcdata.btns_d & WIIDRC_BUTTON_B)
+				cancel = true; // Cancel the dialog with a B/1 button press if accessed by a different controller type
 		}
 	}
 
@@ -3126,7 +3150,10 @@ static int MenuSettingsMappingsMap()
 		if(ret >= 0)
 		{
 			// get a button selection from user
-			btnmap[mapMenuCtrlSNES][mapMenuCtrl][ret] = ButtonMappingWindow();
+			if (!cancel)
+			{
+				btnmap[mapMenuCtrlSNES][mapMenuCtrl][ret] = ButtonMappingWindow();
+			}
 		}
 
 		if(ret >= 0 || firstRun)
