@@ -157,6 +157,7 @@ preparePrefsData ()
 	createXMLSetting("yshift", "Vertical Video Shift", toStr(GCSettings.yshift));
 	createXMLSetting("sfxOverclock", "SuperFX Overclock", toStr(GCSettings.sfxOverclock));
 	createXMLSetting("Interpolation", "Interpolation", toStr(GCSettings.Interpolation));
+	createXMLSetting("MuteAudio", "Mute", toStr(GCSettings.MuteAudio));
 	createXMLSetting("TurboModeEnabled", "Turbo Mode Enabled", toStr(GCSettings.TurboModeEnabled));
 	createXMLSetting("TurboModeButton", "Turbo Mode Button", toStr(GCSettings.TurboModeButton));
 	createXMLSetting("GamepadMenuToggle", "Gamepad Menu Toggle", toStr(GCSettings.GamepadMenuToggle));
@@ -355,6 +356,7 @@ decodePrefsData ()
 			// Audio Settings
 			
 			loadXMLSetting(&GCSettings.Interpolation, "Interpolation");
+			loadXMLSetting(&GCSettings.MuteAudio, "MuteAudio");
 
 			// Emulation Settings
 
@@ -516,8 +518,7 @@ DefaultSettings ()
 	Settings.SoundInputRate = 31920;
 	Settings.DynamicRateControl = true;
 	Settings.SeparateEchoBuffer = false;
-	
-	// Interpolation Method
+	GCSettings.MuteAudio = 0;
 	GCSettings.Interpolation = 0;
 	Settings.InterpolationMethod = DSP_INTERPOLATION_GAUSSIAN;
 
@@ -676,6 +677,8 @@ bool LoadPrefs()
 	bool prefFound = false;
 	char filepath[5][MAXPATHLEN];
 	int numDevices;
+	bool sdMounted = false;
+	bool usbMounted = false;
 	
 #ifdef HW_RVL
 	numDevices = 5;
@@ -716,13 +719,15 @@ bool LoadPrefs()
 	// rename snes9x to snes9xgx
 	if(GCSettings.LoadMethod == DEVICE_SD)
 	{
-		if(ChangeInterface(DEVICE_SD, NOTSILENT) && opendir("sd:/snes9x"))
+		sdMounted = ChangeInterface(DEVICE_SD, NOTSILENT);
+		if(sdMounted && opendir("sd:/snes9x"))
 			rename("sd:/snes9x", "sd:/snes9xgx");
 	}
 	else if(GCSettings.LoadMethod == DEVICE_USB)
 	{
-		if(ChangeInterface(DEVICE_USB, NOTSILENT) && opendir("usb:/snes9x"))
-			rename("usb:/snes9x", "usb:/snes9xgx");
+		usbMounted = ChangeInterface(DEVICE_USB, NOTSILENT);
+		if(usbMounted && opendir("usb:/snes9x"))
+			rename("usb:/snes9x", "usb:/snes9xgx");	
 	}
 	else if(GCSettings.LoadMethod == DEVICE_SMB)
 	{
@@ -750,7 +755,7 @@ bool LoadPrefs()
 		sprintf(GCSettings.ArtworkFolder, "snes9xgx/artwork");
 	
 	// attempt to create directories if they don't exist
-	if(GCSettings.LoadMethod == DEVICE_SD || GCSettings.LoadMethod == DEVICE_USB) {
+	if((GCSettings.LoadMethod == DEVICE_SD && sdMounted) || (GCSettings.LoadMethod == DEVICE_USB && usbMounted) ) {
 		char dirPath[MAXPATHLEN];
 		sprintf(dirPath, "%s%s", pathPrefix[GCSettings.LoadMethod], GCSettings.ScreenshotsFolder);
 		CreateDirectory(dirPath);
@@ -773,6 +778,5 @@ bool LoadPrefs()
 	bg_music_size = bg_music_ogg_size;
 	LoadBgMusic();
 #endif
-
 	return prefFound;
 }
