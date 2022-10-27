@@ -82,6 +82,7 @@ static GuiWindow * mainWindow = NULL;
 static GuiText * settingText = NULL;
 static GuiText * settingText2 = NULL;
 static int lastMenu = MENU_NONE;
+static int prevMenu = MENU_NONE;
 static int mapMenuCtrl = 0;
 static int mapMenuCtrlSNES = 0;
 
@@ -2250,8 +2251,24 @@ static int MenuGameSettings()
 	backBtn.SetTrigger(&trig1);
 	backBtn.SetEffectGrow();
 
+	//char *intStr = itoa(prevMenu);
+	// std::string s = std::to_string(prevMenu);
+	// char const *p = s.c_str();
+	// ErrorPrompt(p);
+
+	if (prevMenu == MENU_GAMESETTINGS_AUDIO)
+	{
+		ErrorPrompt("inside ifstatement");
+		audioBtn.SetState(STATE_SELECTED);
+	}
+	else
+	{
+		cheatsBtn.SetState(STATE_SELECTED);
+	}
+
 	HaltGui();
 	GuiWindow w(screenwidth, screenheight);
+	w.SetIgnoreToggle(true);
 	w.Append(&titleTxt);
 	w.Append(&mappingBtn);
 	w.Append(&videoBtn);
@@ -2261,6 +2278,8 @@ static int MenuGameSettings()
 	w.Append(&cheatsBtn);
 	w.Append(&closeBtn);
 	w.Append(&backBtn);
+	
+	
 	
 	mainWindow->Append(&w);
 
@@ -4798,8 +4817,10 @@ MainMenu (int menu)
 
 	firstRun = false;
 
+	int prevMenuBuffer;
 	while(currentMenu != MENU_EXIT || SNESROMSize <= 0)
 	{
+		prevMenuBuffer = currentMenu;
 		switch (currentMenu)
 		{
 			case MENU_GAMESELECTION:
@@ -4818,7 +4839,9 @@ MainMenu (int menu)
 				currentMenu = MenuGameSaves(2);
 				break;	
 			case MENU_GAMESETTINGS:
+				//ErrorPrompt("Gamesettings switchcase1");
 				currentMenu = MenuGameSettings();
+				//ErrorPrompt("Gamesettings switchcase2");
 				break;
 			case MENU_GAMESETTINGS_MAPPINGS:
 				currentMenu = MenuSettingsMappings();
@@ -4833,7 +4856,9 @@ MainMenu (int menu)
 				currentMenu = MenuSettingsVideo();
 				break;
 			case MENU_GAMESETTINGS_AUDIO:
+				//ErrorPrompt("Audio switchcase1");
 				currentMenu = MenuSettingsAudio();
+				//ErrorPrompt("Audio switchcase2");
 				break;
 			case MENU_GAMESETTINGS_CHEATS:
 				currentMenu = MenuGameCheats();
@@ -4858,6 +4883,7 @@ MainMenu (int menu)
 				break;
 		}
 		lastMenu = currentMenu;
+		prevMenu = prevMenuBuffer;
 		if (btnLogo->GetState() == STATE_CLICKED)
 		{
 			showCredits = true;

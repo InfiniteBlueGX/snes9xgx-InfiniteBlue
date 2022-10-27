@@ -174,9 +174,12 @@ void GuiWindow::SetFocus(int f)
 {
 	focus = f;
 
-	if(f == 1 && !ignoreToggle)
+	if(f == 1)
 	{
-		this->MoveSelectionVert(1);
+		if (!ignoreToggle)
+		{
+			this->MoveSelectionVert(1);
+		}
 	}
 	else
 	{
