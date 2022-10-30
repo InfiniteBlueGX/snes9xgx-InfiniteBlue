@@ -520,6 +520,7 @@ class GuiWindow : public GuiElement
 		//!Sets the window focus
 		//!\param f Focus
 		void SetFocus(int f);
+		void SetIgnoreInitialFocus(bool t);
 		//!Change the focus to the specified element
 		//!This is intended for the primary GuiWindow only
 		//!\param e GuiElement that should have focus

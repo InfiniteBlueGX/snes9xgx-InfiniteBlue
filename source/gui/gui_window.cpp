@@ -10,6 +10,8 @@
 
 #include "gui.h"
 
+bool ignoreInitialFocus = false;
+
 GuiWindow::GuiWindow()
 {
 	width = 0;
@@ -161,12 +163,22 @@ void GuiWindow::SetVisible(bool v)
 	}
 }
 
+void GuiWindow::SetIgnoreInitialFocus(bool t)
+{
+	ignoreInitialFocus = t;
+}
+
 void GuiWindow::SetFocus(int f)
 {
 	focus = f;
 
 	if(f == 1)
-		this->MoveSelectionVert(1);
+	{
+		if (!ignoreInitialFocus)
+		{
+			this->MoveSelectionVert(1);
+		}
+	}
 	else
 		this->ResetState();
 }

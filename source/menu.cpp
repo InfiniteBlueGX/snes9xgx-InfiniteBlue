@@ -82,6 +82,7 @@ static GuiWindow * mainWindow = NULL;
 static GuiText * settingText = NULL;
 static GuiText * settingText2 = NULL;
 static int lastMenu = MENU_NONE;
+static int previousMenu = MENU_NONE;
 static int mapMenuCtrl = 0;
 static int mapMenuCtrlSNES = 0;
 
@@ -2264,8 +2265,31 @@ static int MenuGameSettings()
 	backBtn.SetTrigger(&trig1);
 	backBtn.SetEffectGrow();
 
+	switch (previousMenu)
+	{
+		case MENU_GAMESETTINGS_MAPPINGS:
+			mappingBtn.SetState(STATE_SELECTED);
+			break;
+		case MENU_GAMESETTINGS_AUDIO:
+			audioBtn.SetState(STATE_SELECTED);
+			break;
+		case MENU_GAMESETTINGS_VIDEO:
+			videoBtn.SetState(STATE_SELECTED);
+			break;
+		case MENU_GAMESETTINGS_MAPPINGS_CTRL:
+			controllerBtn.SetState(STATE_SELECTED);
+			break;
+		case MENU_GAMESETTINGS_CHEATS:
+			cheatsBtn.SetState(STATE_SELECTED);
+			break;
+		default:
+			closeBtn.SetState(STATE_SELECTED);
+			break;
+	}
+
 	HaltGui();
 	GuiWindow w(screenwidth, screenheight);
+	w.SetIgnoreInitialFocus(true);
 	w.Append(&titleTxt);
 	w.Append(&mappingBtn);
 	w.Append(&videoBtn);
@@ -2309,6 +2333,7 @@ static int MenuGameSettings()
 			}
 			else {
 				InfoPrompt("Cheats file not found!");
+				cheatsBtn.SetState(STATE_SELECTED);
 			}
 		}
 		else if(screenshotBtn.GetState() == STATE_CLICKED)
@@ -2318,6 +2343,8 @@ static int MenuGameSettings()
 				snprintf(filepath, 1024, "%s%s/%s", pathPrefix[GCSettings.SaveMethod], GCSettings.ScreenshotsFolder, Memory.ROMFilename);
 				SavePreviewImg(filepath, NOTSILENT); 
 			}
+
+			screenshotBtn.SetState(STATE_SELECTED);
 		}
 		else if(closeBtn.GetState() == STATE_CLICKED)
 		{
@@ -4861,8 +4888,10 @@ MainMenu (int menu)
 
 	firstRun = false;
 
+	int previousMenuBuffer;
 	while(currentMenu != MENU_EXIT || SNESROMSize <= 0)
 	{
+		previousMenuBuffer = currentMenu;
 		switch (currentMenu)
 		{
 			case MENU_GAMESELECTION:
@@ -4921,6 +4950,7 @@ MainMenu (int menu)
 				break;
 		}
 		lastMenu = currentMenu;
+		previousMenu = previousMenuBuffer;
 		if (btnLogo->GetState() == STATE_CLICKED)
 		{
 			showCredits = true;
