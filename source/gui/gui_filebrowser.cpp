@@ -26,8 +26,8 @@ GuiFileBrowser::GuiFileBrowser(int w, int h)
 
 	trigA = new GuiTrigger;
 	trigA->SetSimpleTrigger(-1, WPAD_BUTTON_A | WPAD_CLASSIC_BUTTON_A, PAD_BUTTON_A, WIIDRC_BUTTON_A);
-	trig2 = new GuiTrigger;
-	trig2->SetSimpleTrigger(-1, WPAD_BUTTON_2, 0, 0);
+	// trig2 = new GuiTrigger;
+	// trig2->SetButtonOnlyTrigger(-1, WPAD_BUTTON_2, 0, 0);
 
 	trigHeldA = new GuiTrigger;
 	trigHeldA->SetHeldTrigger(-1, WPAD_BUTTON_A | WPAD_CLASSIC_BUTTON_A, PAD_BUTTON_A, WIIDRC_BUTTON_A);
@@ -119,7 +119,7 @@ GuiFileBrowser::GuiFileBrowser(int w, int h)
 		fileList[i]->SetImageOver(fileListBg[i]);
 		fileList[i]->SetPosition(2,26*i+3);
 		fileList[i]->SetTrigger(trigA);
-		fileList[i]->SetTrigger(trig2);
+		//fileList[i]->SetTrigger(trig2);
 		fileList[i]->SetSoundClick(btnSoundClick);
 	}
 }
@@ -161,7 +161,7 @@ GuiFileBrowser::~GuiFileBrowser()
 	delete btnSoundClick;
 	delete trigHeldA;
 	delete trigA;
-	delete trig2;
+	//delete trig2;
 
 	for(int i=0; i<FILE_PAGESIZE; i++)
 	{
