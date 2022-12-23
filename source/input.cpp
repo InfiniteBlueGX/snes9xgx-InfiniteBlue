@@ -337,40 +337,50 @@ void
 UpdatePads()
 {
 	#ifdef HW_RVL
-	WiiDRC_ScanPads();
-	Retrode_ScanPads();
-	XBOX360_ScanPads();
-	Hornet_ScanPads();
-	Mayflash_ScanPads();
+	// WiiDRC_ScanPads();
+	// Retrode_ScanPads();
+	// XBOX360_ScanPads();
+	// Hornet_ScanPads();
+	// Mayflash_ScanPads();
 	WPAD_ScanPads();
 	#endif
 
-	PAD_ScanPads();
+	userInput[0].pad.btns_d = PAD_ButtonsDown(0);
+	userInput[0].pad.btns_u = PAD_ButtonsUp(0);
+	userInput[0].pad.btns_h = PAD_ButtonsHeld(0);
+	userInput[0].pad.stickX = PAD_StickX(0);
+	userInput[0].pad.stickY = PAD_StickY(0);
+	userInput[0].pad.substickX = PAD_SubStickX(0);
+	userInput[0].pad.substickY = PAD_SubStickY(0);
+	userInput[0].pad.triggerL = PAD_TriggerL(0);
+	userInput[0].pad.triggerR = PAD_TriggerR(0);
 
-	for(int i=3; i >= 0; i--)
-	{
-		userInput[i].pad.btns_d = PAD_ButtonsDown(i);
-		userInput[i].pad.btns_u = PAD_ButtonsUp(i);
-		userInput[i].pad.btns_h = PAD_ButtonsHeld(i);
-		userInput[i].pad.stickX = PAD_StickX(i);
-		userInput[i].pad.stickY = PAD_StickY(i);
-		userInput[i].pad.substickX = PAD_SubStickX(i);
-		userInput[i].pad.substickY = PAD_SubStickY(i);
-		userInput[i].pad.triggerL = PAD_TriggerL(i);
-		userInput[i].pad.triggerR = PAD_TriggerR(i);
-	}
-#ifdef HW_RVL
-	if(WiiDRC_Inited() && WiiDRC_Connected())
-	{
-		userInput[0].wiidrcdata.btns_d = WiiDRC_ButtonsDown();
-		userInput[0].wiidrcdata.btns_u = WiiDRC_ButtonsUp();
-		userInput[0].wiidrcdata.btns_h = WiiDRC_ButtonsHeld();
-		userInput[0].wiidrcdata.stickX = WiiDRC_lStickX();
-		userInput[0].wiidrcdata.stickY = WiiDRC_lStickY();
-		userInput[0].wiidrcdata.substickX = WiiDRC_rStickX();
-		userInput[0].wiidrcdata.substickY = WiiDRC_rStickY();
-	}
-#endif
+	//PAD_ScanPads();
+
+// 	for(int i=3; i >= 0; i--)
+// 	{
+// 		userInput[i].pad.btns_d = PAD_ButtonsDown(i);
+// 		userInput[i].pad.btns_u = PAD_ButtonsUp(i);
+// 		userInput[i].pad.btns_h = PAD_ButtonsHeld(i);
+// 		userInput[i].pad.stickX = PAD_StickX(i);
+// 		userInput[i].pad.stickY = PAD_StickY(i);
+// 		userInput[i].pad.substickX = PAD_SubStickX(i);
+// 		userInput[i].pad.substickY = PAD_SubStickY(i);
+// 		userInput[i].pad.triggerL = PAD_TriggerL(i);
+// 		userInput[i].pad.triggerR = PAD_TriggerR(i);
+// 	}
+// #ifdef HW_RVL
+// 	if(WiiDRC_Inited() && WiiDRC_Connected())
+// 	{
+// 		userInput[0].wiidrcdata.btns_d = WiiDRC_ButtonsDown();
+// 		userInput[0].wiidrcdata.btns_u = WiiDRC_ButtonsUp();
+// 		userInput[0].wiidrcdata.btns_h = WiiDRC_ButtonsHeld();
+// 		userInput[0].wiidrcdata.stickX = WiiDRC_lStickX();
+// 		userInput[0].wiidrcdata.stickY = WiiDRC_lStickY();
+// 		userInput[0].wiidrcdata.substickX = WiiDRC_rStickX();
+// 		userInput[0].wiidrcdata.substickY = WiiDRC_rStickY();
+// 	}
+//#endif
 }
 
 /****************************************************************************
@@ -524,9 +534,9 @@ static void decodepad (int chan, int emuChan)
 {
 	int i, offset;
 
-	s8 pad_x = userInput[chan].pad.stickX;
-	s8 pad_y = userInput[chan].pad.stickY;
-	u32 jp = userInput[chan].pad.btns_h;
+	// s8 pad_x = userInput[chan].pad.stickX;
+	// s8 pad_y = userInput[chan].pad.stickY;
+	// u32 jp = userInput[chan].pad.btns_h;
 
 #ifdef HW_RVL
 	s8 wm_ax = userInput[chan].WPAD_StickX(0);
@@ -538,33 +548,33 @@ static void decodepad (int chan, int emuChan)
 	if ( WPAD_Probe(chan, &exp_type) != 0 )
 		exp_type = WPAD_EXP_NONE;
 
-	s16 wiidrc_ax = userInput[chan].wiidrcdata.stickX;
-	s16 wiidrc_ay = userInput[chan].wiidrcdata.stickY;
-	u32 wiidrcp = userInput[chan].wiidrcdata.btns_h;
+	// s16 wiidrc_ax = userInput[chan].wiidrcdata.stickX;
+	// s16 wiidrc_ay = userInput[chan].wiidrcdata.stickY;
+	// u32 wiidrcp = userInput[chan].wiidrcdata.btns_h;
 
-	jp |= Retrode_ButtonsHeld(chan);
-    jp |= XBOX360_ButtonsHeld(chan);
-	jp |= Hornet_ButtonsHeld(chan);
-	jp |= Mayflash_ButtonsHeld(chan);
+	// jp |= Retrode_ButtonsHeld(chan);
+    // jp |= XBOX360_ButtonsHeld(chan);
+	// jp |= Hornet_ButtonsHeld(chan);
+	// jp |= Mayflash_ButtonsHeld(chan);
 #endif
 
 	/***
 	Gamecube Joystick input
 	***/
-	if (pad_y > ANALOG_SENSITIVITY)
-		jp |= PAD_BUTTON_UP;
-	else if (pad_y < -ANALOG_SENSITIVITY)
-		jp |= PAD_BUTTON_DOWN;
-	if (pad_x < -ANALOG_SENSITIVITY)
-		jp |= PAD_BUTTON_LEFT;
-	else if (pad_x > ANALOG_SENSITIVITY)
-		jp |= PAD_BUTTON_RIGHT;
+	// if (pad_y > ANALOG_SENSITIVITY)
+	// 	jp |= PAD_BUTTON_UP;
+	// else if (pad_y < -ANALOG_SENSITIVITY)
+	// 	jp |= PAD_BUTTON_DOWN;
+	// if (pad_x < -ANALOG_SENSITIVITY)
+	// 	jp |= PAD_BUTTON_LEFT;
+	// else if (pad_x > ANALOG_SENSITIVITY)
+	// 	jp |= PAD_BUTTON_RIGHT;
 
-	// Count as pressed if down far enough (~50% down)
-	if (userInput[chan].pad.triggerL > 0x80)
-		jp |= PAD_TRIGGER_L;
-	if (userInput[chan].pad.triggerR > 0x80)
-		jp |= PAD_TRIGGER_R;
+	// // Count as pressed if down far enough (~50% down)
+	// if (userInput[chan].pad.triggerL > 0x80)
+	// 	jp |= PAD_TRIGGER_L;
+	// if (userInput[chan].pad.triggerR > 0x80)
+	// 	jp |= PAD_TRIGGER_R;
 
 #ifdef HW_RVL
 	/***
@@ -580,59 +590,59 @@ static void decodepad (int chan, int emuChan)
 		wp |= (exp_type == WPAD_EXP_CLASSIC) ? WPAD_CLASSIC_BUTTON_RIGHT : WPAD_BUTTON_RIGHT;
 
 	/* Wii U Gamepad */
-	if (wiidrc_ay > ANALOG_SENSITIVITY)
-		wiidrcp |= WIIDRC_BUTTON_UP;
-	else if (wiidrc_ay < -ANALOG_SENSITIVITY)
-		wiidrcp |= WIIDRC_BUTTON_DOWN;
-	if (wiidrc_ax < -ANALOG_SENSITIVITY)
-		wiidrcp |= WIIDRC_BUTTON_LEFT;
-	else if (wiidrc_ax > ANALOG_SENSITIVITY)
-		wiidrcp |= WIIDRC_BUTTON_RIGHT;
+	// if (wiidrc_ay > ANALOG_SENSITIVITY)
+	// 	wiidrcp |= WIIDRC_BUTTON_UP;
+	// else if (wiidrc_ay < -ANALOG_SENSITIVITY)
+	// 	wiidrcp |= WIIDRC_BUTTON_DOWN;
+	// if (wiidrc_ax < -ANALOG_SENSITIVITY)
+	// 	wiidrcp |= WIIDRC_BUTTON_LEFT;
+	// else if (wiidrc_ax > ANALOG_SENSITIVITY)
+	// 	wiidrcp |= WIIDRC_BUTTON_RIGHT;
 #endif
 
-	if (GCSettings.MapABXYRightStick == 1)
-	{
-		s8 pad_substickX = userInput[chan].pad.substickX;
-		s8 pad_substickY = userInput[chan].pad.substickY;
-#ifdef HW_RVL
-		s8 wm_substickX = userInput[chan].WPAD_StickX(1);
-		s8 wm_substickY = userInput[chan].WPAD_StickY(1);
-		s16 wiidrc_substickX = userInput[chan].wiidrcdata.substickX;
-		s16 wiidrc_substickY = userInput[chan].wiidrcdata.substickY;
-#endif
+// 	if (GCSettings.MapABXYRightStick == 1)
+// 	{
+// 		s8 pad_substickX = userInput[chan].pad.substickX;
+// 		s8 pad_substickY = userInput[chan].pad.substickY;
+// #ifdef HW_RVL
+// 		s8 wm_substickX = userInput[chan].WPAD_StickX(1);
+// 		s8 wm_substickY = userInput[chan].WPAD_StickY(1);
+// 		s16 wiidrc_substickX = userInput[chan].wiidrcdata.substickX;
+// 		s16 wiidrc_substickY = userInput[chan].wiidrcdata.substickY;
+// #endif
 
-		/* Gamecube Controller */
-		if (pad_substickY > ANALOG_SENSITIVITY)
-			jp |= PAD_BUTTON_X;
-		else if (pad_substickY < -ANALOG_SENSITIVITY)
-			jp |= PAD_BUTTON_B;
-		if (pad_substickX < -ANALOG_SENSITIVITY)
-			jp |= PAD_BUTTON_Y;
-		else if (pad_substickX > ANALOG_SENSITIVITY)
-			jp |= PAD_BUTTON_A;
+// 		/* Gamecube Controller */
+// 		if (pad_substickY > ANALOG_SENSITIVITY)
+// 			jp |= PAD_BUTTON_X;
+// 		else if (pad_substickY < -ANALOG_SENSITIVITY)
+// 			jp |= PAD_BUTTON_B;
+// 		if (pad_substickX < -ANALOG_SENSITIVITY)
+// 			jp |= PAD_BUTTON_Y;
+// 		else if (pad_substickX > ANALOG_SENSITIVITY)
+// 			jp |= PAD_BUTTON_A;
 
-#ifdef HW_RVL
-		/* Wii Controller */
-		if (wm_substickY > ANALOG_SENSITIVITY)
-			wp |= WPAD_CLASSIC_BUTTON_X;
-		else if (wm_substickY < -ANALOG_SENSITIVITY)
-			wp |= WPAD_CLASSIC_BUTTON_B;
-		if (wm_substickX < -ANALOG_SENSITIVITY)
-			wp |= WPAD_CLASSIC_BUTTON_Y;
-		else if (wm_substickX > ANALOG_SENSITIVITY)
-			wp |= WPAD_CLASSIC_BUTTON_A;
+// #ifdef HW_RVL
+// 		/* Wii Controller */
+// 		if (wm_substickY > ANALOG_SENSITIVITY)
+// 			wp |= WPAD_CLASSIC_BUTTON_X;
+// 		else if (wm_substickY < -ANALOG_SENSITIVITY)
+// 			wp |= WPAD_CLASSIC_BUTTON_B;
+// 		if (wm_substickX < -ANALOG_SENSITIVITY)
+// 			wp |= WPAD_CLASSIC_BUTTON_Y;
+// 		else if (wm_substickX > ANALOG_SENSITIVITY)
+// 			wp |= WPAD_CLASSIC_BUTTON_A;
 
-		/* Wii U Gamepad */
-		if (wiidrc_substickY > ANALOG_SENSITIVITY)
-			wiidrcp |= WIIDRC_BUTTON_X;
-		else if (wiidrc_substickY < -ANALOG_SENSITIVITY)
-			wiidrcp |= WIIDRC_BUTTON_B;
-		if (wiidrc_substickX < -ANALOG_SENSITIVITY)
-			wiidrcp |= WIIDRC_BUTTON_Y;
-		else if (wiidrc_substickX > ANALOG_SENSITIVITY)
-			wiidrcp |= WIIDRC_BUTTON_A;
-#endif
-	}
+// 		/* Wii U Gamepad */
+// 		if (wiidrc_substickY > ANALOG_SENSITIVITY)
+// 			wiidrcp |= WIIDRC_BUTTON_X;
+// 		else if (wiidrc_substickY < -ANALOG_SENSITIVITY)
+// 			wiidrcp |= WIIDRC_BUTTON_B;
+// 		if (wiidrc_substickX < -ANALOG_SENSITIVITY)
+// 			wiidrcp |= WIIDRC_BUTTON_Y;
+// 		else if (wiidrc_substickX > ANALOG_SENSITIVITY)
+// 			wiidrcp |= WIIDRC_BUTTON_A;
+// #endif
+// 	}
 
 	/*** Fix offset to pad ***/
 	offset = ((emuChan + 1) << 4);
@@ -640,15 +650,16 @@ static void decodepad (int chan, int emuChan)
 	/*** Report pressed buttons (gamepads) ***/
 	for (i = 0; i < MAXJP; i++)
     {
-		if ( (jp & btnmap[CTRL_PAD][CTRLR_GCPAD][i])											// gamecube controller
-#ifdef HW_RVL
-		|| ( (exp_type == WPAD_EXP_NONE) && (wp & btnmap[CTRL_PAD][CTRLR_WIIMOTE][i]) )	// wiimote
-		|| ( (exp_type == WPAD_EXP_CLASSIC && !isWUPC) && (wp & btnmap[CTRL_PAD][CTRLR_CLASSIC][i]) )	// classic controller
-		|| ( (exp_type == WPAD_EXP_CLASSIC && isWUPC) && (wp & btnmap[CTRL_PAD][CTRLR_WUPC][i]) )	// wii u pro controller
-		|| ( (exp_type == WPAD_EXP_NUNCHUK) && (wp & btnmap[CTRL_PAD][CTRLR_NUNCHUK][i]) )	// nunchuk + wiimote
-		|| ( (wiidrcp & btnmap[CTRL_PAD][CTRLR_WIIDRC][i]) ) // Wii U Gamepad
-#endif
-		)
+// 		if ( (jp & btnmap[CTRL_PAD][CTRLR_GCPAD][i])											// gamecube controller
+// #ifdef HW_RVL
+// 		|| ( (exp_type == WPAD_EXP_NONE) && (wp & btnmap[CTRL_PAD][CTRLR_WIIMOTE][i]) )	// wiimote
+// 		|| ( (exp_type == WPAD_EXP_CLASSIC && !isWUPC) && (wp & btnmap[CTRL_PAD][CTRLR_CLASSIC][i]) )	// classic controller
+// 		|| ( (exp_type == WPAD_EXP_CLASSIC && isWUPC) && (wp & btnmap[CTRL_PAD][CTRLR_WUPC][i]) )	// wii u pro controller
+// 		|| ( (exp_type == WPAD_EXP_NUNCHUK) && (wp & btnmap[CTRL_PAD][CTRLR_NUNCHUK][i]) )	// nunchuk + wiimote
+// 		|| ( (wiidrcp & btnmap[CTRL_PAD][CTRLR_WIIDRC][i]) ) // Wii U Gamepad
+// #endif
+// 		)
+		if ( (exp_type == WPAD_EXP_CLASSIC) && (wp & btnmap[CTRL_PAD][CTRLR_CLASSIC][i]) )	// classic controller
 			S9xReportButton (offset + i, true);
 		else
 			S9xReportButton (offset + i, false);
@@ -661,12 +672,13 @@ static void decodepad (int chan, int emuChan)
 		offset = 0x50;
 		for (i = 0; i < 6; i++)
 		{
-			if (jp & btnmap[CTRL_SCOPE][CTRLR_GCPAD][i]
+			if (//jp & btnmap[CTRL_SCOPE][CTRLR_GCPAD][i]
 #ifdef HW_RVL
-			|| wp & btnmap[CTRL_SCOPE][CTRLR_WIIMOTE][i]
-			|| wp & btnmap[CTRL_SCOPE][CTRLR_CLASSIC][i]
-			|| wp & btnmap[CTRL_SCOPE][CTRLR_WUPC][i]
-			|| wiidrcp & btnmap[CTRL_SCOPE][CTRLR_WIIDRC][i]
+wp & btnmap[CTRL_SCOPE][CTRLR_CLASSIC][i]
+			//|| wp & btnmap[CTRL_SCOPE][CTRLR_WIIMOTE][i]
+			//|| wp & btnmap[CTRL_SCOPE][CTRLR_CLASSIC][i]
+			//|| wp & btnmap[CTRL_SCOPE][CTRLR_WUPC][i]
+			//|| wiidrcp & btnmap[CTRL_SCOPE][CTRLR_WIIDRC][i]
 #endif
 			)
 			{
@@ -694,129 +706,133 @@ static void decodepad (int chan, int emuChan)
 		UpdateCursorPosition(emuChan, cursor_x[0], cursor_y[0]);
 		S9xReportPointer(offset, (u16) cursor_x[0], (u16) cursor_y[0]);
 	}
-	/*** Mouse ***/
-	else if (Settings.MouseMaster && emuChan < 2)
-	{
-		// buttons
-		offset = 0x60 + (2 * emuChan);
-		for (i = 0; i < 2; i++)
-		{
-			if (jp & btnmap[CTRL_MOUSE][CTRLR_GCPAD][i]
-#ifdef HW_RVL
-			|| wp & btnmap[CTRL_MOUSE][CTRLR_WIIMOTE][i]
-			|| wp & btnmap[CTRL_MOUSE][CTRLR_CLASSIC][i]
-			|| wp & btnmap[CTRL_MOUSE][CTRLR_WUPC][i]
-			|| wiidrcp & btnmap[CTRL_MOUSE][CTRLR_WIIDRC][i]
-#endif
-			)
-				S9xReportButton(offset + i, true);
-			else
-				S9xReportButton(offset + i, false);
-		}
-		// pointer
-		offset = 0x81;
-		UpdateCursorPosition(emuChan, cursor_x[1 + emuChan], cursor_y[1 + emuChan]);
-		S9xReportPointer(offset + emuChan, (u16) cursor_x[1 + emuChan],
-				(u16) cursor_y[1 + emuChan]);
-	}
-	/*** Justifier ***/
-	else if (Settings.JustifierMaster && emuChan < 2)
-	{
-		// buttons
-		offset = 0x70 + (3 * emuChan);
-		for (i = 0; i < 3; i++)
-		{
-			if (jp & btnmap[CTRL_JUST][CTRLR_GCPAD][i]
-#ifdef HW_RVL
-			|| wp & btnmap[CTRL_JUST][CTRLR_WIIMOTE][i]
-			|| wp & btnmap[CTRL_JUST][CTRLR_CLASSIC][i]
-			|| wp & btnmap[CTRL_JUST][CTRLR_WUPC][i]
-			|| wiidrcp & btnmap[CTRL_JUST][CTRLR_WIIDRC][i]
-#endif
-			)
-				S9xReportButton(offset + i, true);
-			else
-				S9xReportButton(offset + i, false);
-		}
-		// pointer
-		offset = 0x83;
-		UpdateCursorPosition(emuChan, cursor_x[3 + emuChan], cursor_y[3 + emuChan]);
-		S9xReportPointer(offset + emuChan, (u16) cursor_x[3 + emuChan],
-				(u16) cursor_y[3 + emuChan]);
-	}
+// 	/*** Mouse ***/
+// 	else if (Settings.MouseMaster && emuChan < 2)
+// 	{
+// 		// buttons
+// 		offset = 0x60 + (2 * emuChan);
+// 		for (i = 0; i < 2; i++)
+// 		{
+// 			if (jp & btnmap[CTRL_MOUSE][CTRLR_GCPAD][i]
+// #ifdef HW_RVL
+// 			|| wp & btnmap[CTRL_MOUSE][CTRLR_WIIMOTE][i]
+// 			|| wp & btnmap[CTRL_MOUSE][CTRLR_CLASSIC][i]
+// 			|| wp & btnmap[CTRL_MOUSE][CTRLR_WUPC][i]
+// 			|| wiidrcp & btnmap[CTRL_MOUSE][CTRLR_WIIDRC][i]
+// #endif
+// 			)
+// 				S9xReportButton(offset + i, true);
+// 			else
+// 				S9xReportButton(offset + i, false);
+// 		}
+// 		// pointer
+// 		offset = 0x81;
+// 		UpdateCursorPosition(emuChan, cursor_x[1 + emuChan], cursor_y[1 + emuChan]);
+// 		S9xReportPointer(offset + emuChan, (u16) cursor_x[1 + emuChan],
+// 				(u16) cursor_y[1 + emuChan]);
+// 	}
+// 	/*** Justifier ***/
+// 	else if (Settings.JustifierMaster && emuChan < 2)
+// 	{
+// 		// buttons
+// 		offset = 0x70 + (3 * emuChan);
+// 		for (i = 0; i < 3; i++)
+// 		{
+// 			if (jp & btnmap[CTRL_JUST][CTRLR_GCPAD][i]
+// #ifdef HW_RVL
+// 			|| wp & btnmap[CTRL_JUST][CTRLR_WIIMOTE][i]
+// 			|| wp & btnmap[CTRL_JUST][CTRLR_CLASSIC][i]
+// 			|| wp & btnmap[CTRL_JUST][CTRLR_WUPC][i]
+// 			|| wiidrcp & btnmap[CTRL_JUST][CTRLR_WIIDRC][i]
+// #endif
+// 			)
+// 				S9xReportButton(offset + i, true);
+// 			else
+// 				S9xReportButton(offset + i, false);
+// 		}
+// 		// pointer
+// 		offset = 0x83;
+// 		UpdateCursorPosition(emuChan, cursor_x[3 + emuChan], cursor_y[3 + emuChan]);
+// 		S9xReportPointer(offset + emuChan, (u16) cursor_x[3 + emuChan],
+// 				(u16) cursor_y[3 + emuChan]);
+// 	}
 
-#ifdef HW_RVL
-	// screenshot (temp)
-	if (wp & CLASSIC_CTRL_BUTTON_ZR)
-		S9xReportButton(0x90, true);
-	else
-		S9xReportButton(0x90, false);
-#endif
+// #ifdef HW_RVL
+// 	// screenshot (temp)
+// 	if (wp & CLASSIC_CTRL_BUTTON_ZR)
+// 		S9xReportButton(0x90, true);
+// 	else
+// 		S9xReportButton(0x90, false);
+//#endif
 }
 
 bool MenuRequested()
 {
-	for(int i=0; i<4; i++)
+	if (userInput[0].wpad->btns_h & WPAD_CLASSIC_BUTTON_HOME)
 	{
-		if (GCSettings.GamepadMenuToggle == 1) // Home (WiiPad) or Right Stick (GC/3rd party gamepad) only
-		{
-			if (
-				(userInput[i].pad.substickX < -70)
-				#ifdef HW_RVL
-				|| (userInput[i].wpad->btns_h & WPAD_BUTTON_HOME) ||
-				(userInput[i].wpad->btns_h & WPAD_CLASSIC_BUTTON_HOME) ||
-				(userInput[i].wiidrcdata.btns_h & WIIDRC_BUTTON_HOME)
-				#endif
-			)
-			{
-				return true;
-			}
-		}
-		else if (GCSettings.GamepadMenuToggle == 2) // L+R+Start / 1+2+Plus (Wiimote) combo only (frees up the right stick on GC/3rd party gamepad)
-		{
-			if (
-				(userInput[i].pad.btns_h & PAD_TRIGGER_L &&
-				userInput[i].pad.btns_h & PAD_TRIGGER_R &&
-				userInput[i].pad.btns_h & PAD_BUTTON_START)
-				#ifdef HW_RVL
-				|| (userInput[i].wpad->btns_h & WPAD_CLASSIC_BUTTON_FULL_L &&
-				userInput[i].wpad->btns_h & WPAD_CLASSIC_BUTTON_FULL_R &&
-				userInput[i].wpad->btns_h & WPAD_CLASSIC_BUTTON_PLUS)
-				|| (userInput[i].wpad->btns_h & WPAD_BUTTON_PLUS &&
-				userInput[i].wpad->btns_h & WPAD_BUTTON_1 &&
-				userInput[i].wpad->btns_h & WPAD_BUTTON_2)
-				#endif
-			)
-			{
-				return true;
-			}
-		}
-		else // All toggle options enabled
-		{
-			if (
-				(userInput[i].pad.substickX < -70) ||
-				(userInput[i].pad.btns_h & PAD_TRIGGER_L &&
-				userInput[i].pad.btns_h & PAD_TRIGGER_R &&
-				userInput[i].pad.btns_h & PAD_BUTTON_START)
-				#ifdef HW_RVL
-				|| (userInput[i].wpad->btns_h & WPAD_BUTTON_HOME) ||
-				(userInput[i].wpad->btns_h & WPAD_CLASSIC_BUTTON_HOME) ||
-				(userInput[i].wiidrcdata.btns_h & WIIDRC_BUTTON_HOME) ||
-				(userInput[i].wpad->btns_h & WPAD_CLASSIC_BUTTON_FULL_L &&
-				userInput[i].wpad->btns_h & WPAD_CLASSIC_BUTTON_FULL_R &&
-				userInput[i].wpad->btns_h & WPAD_CLASSIC_BUTTON_PLUS)
-				|| (userInput[i].wpad->btns_h & WPAD_BUTTON_PLUS &&
-				userInput[i].wpad->btns_h & WPAD_BUTTON_1 &&
-				userInput[i].wpad->btns_h & WPAD_BUTTON_2)
-				#endif
-			)
-			{
-				return true;
-			}
-		}
+		return true;
+	}
+	// for(int i=0; i<4; i++)
+	// {
+	// 	if (GCSettings.GamepadMenuToggle == 1) // Home (WiiPad) or Right Stick (GC/3rd party gamepad) only
+	// 	{
+	// 		if (
+	// 			(userInput[i].pad.substickX < -70)
+	// 			#ifdef HW_RVL
+	// 			|| (userInput[i].wpad->btns_h & WPAD_BUTTON_HOME) ||
+	// 			(userInput[i].wpad->btns_h & WPAD_CLASSIC_BUTTON_HOME) ||
+	// 			(userInput[i].wiidrcdata.btns_h & WIIDRC_BUTTON_HOME)
+	// 			#endif
+	// 		)
+	// 		{
+	// 			return true;
+	// 		}
+	// 	}
+	// 	else if (GCSettings.GamepadMenuToggle == 2) // L+R+Start / 1+2+Plus (Wiimote) combo only (frees up the right stick on GC/3rd party gamepad)
+	// 	{
+	// 		if (
+	// 			(userInput[i].pad.btns_h & PAD_TRIGGER_L &&
+	// 			userInput[i].pad.btns_h & PAD_TRIGGER_R &&
+	// 			userInput[i].pad.btns_h & PAD_BUTTON_START)
+	// 			#ifdef HW_RVL
+	// 			|| (userInput[i].wpad->btns_h & WPAD_CLASSIC_BUTTON_FULL_L &&
+	// 			userInput[i].wpad->btns_h & WPAD_CLASSIC_BUTTON_FULL_R &&
+	// 			userInput[i].wpad->btns_h & WPAD_CLASSIC_BUTTON_PLUS)
+	// 			|| (userInput[i].wpad->btns_h & WPAD_BUTTON_PLUS &&
+	// 			userInput[i].wpad->btns_h & WPAD_BUTTON_1 &&
+	// 			userInput[i].wpad->btns_h & WPAD_BUTTON_2)
+	// 			#endif
+	// 		)
+	// 		{
+	// 			return true;
+	// 		}
+	// 	}
+	// 	else // All toggle options enabled
+	// 	{
+	// 		if (
+	// 			(userInput[i].pad.substickX < -70) ||
+	// 			(userInput[i].pad.btns_h & PAD_TRIGGER_L &&
+	// 			userInput[i].pad.btns_h & PAD_TRIGGER_R &&
+	// 			userInput[i].pad.btns_h & PAD_BUTTON_START)
+	// 			#ifdef HW_RVL
+	// 			|| (userInput[i].wpad->btns_h & WPAD_BUTTON_HOME) ||
+	// 			(userInput[i].wpad->btns_h & WPAD_CLASSIC_BUTTON_HOME) ||
+	// 			(userInput[i].wiidrcdata.btns_h & WIIDRC_BUTTON_HOME) ||
+	// 			(userInput[i].wpad->btns_h & WPAD_CLASSIC_BUTTON_FULL_L &&
+	// 			userInput[i].wpad->btns_h & WPAD_CLASSIC_BUTTON_FULL_R &&
+	// 			userInput[i].wpad->btns_h & WPAD_CLASSIC_BUTTON_PLUS)
+	// 			|| (userInput[i].wpad->btns_h & WPAD_BUTTON_PLUS &&
+	// 			userInput[i].wpad->btns_h & WPAD_BUTTON_1 &&
+	// 			userInput[i].wpad->btns_h & WPAD_BUTTON_2)
+	// 			#endif
+	// 		)
+	// 		{
+	// 			return true;
+	// 		}
+	// 	}
 
 		
-	}
+	//}
 	return false;
 }
 
@@ -907,21 +923,21 @@ bool IsTurboModeInputPressed()
  ***************************************************************************/
 void ReportButtons ()
 {
-	int i;
+	//int i;
 
 	UpdatePads();
 
-	if (GCSettings.TurboModeEnabled == 1)
-	{
-		Settings.TurboMode = IsTurboModeInputPressed();
-	}
+	// if (GCSettings.TurboModeEnabled == 1)
+	// {
+	// 	Settings.TurboMode = IsTurboModeInputPressed();
+	// }
 	
-	if(Settings.TurboMode) {
-		Settings.SoundSync = false;
-	}
-	else {
-		Settings.SoundSync = soundSync;
-	}
+	// if(Settings.TurboMode) {
+	// 	Settings.SoundSync = false;
+	// }
+	// else {
+	// 	Settings.SoundSync = soundSync;
+	// }
 
 	/* Check for menu:
 	 * CStick left
@@ -932,13 +948,15 @@ void ReportButtons ()
 	if(MenuRequested())
 		ScreenshotRequested = 1; // go to the menu
 
-	int numControllers = (Settings.MultiPlayer5Master == true ? 4 : 2);
+	//int numControllers = (Settings.MultiPlayer5Master == true ? 4 : 2);
 
-	for (i = 0; i < 4; i++) {
-		if(playerMapping[i] < numControllers) {
-			decodepad (i, playerMapping[i]);
-		}
-	}
+	// for (i = 0; i < 4; i++) {
+	// 	if(playerMapping[i] < numControllers) {
+	// 		decodepad (i, playerMapping[i]);
+	// 	}
+	// }
+
+	decodepad (0, playerMapping[0]);
 }
 
 void SetControllers()
