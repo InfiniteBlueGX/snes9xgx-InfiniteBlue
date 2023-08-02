@@ -4,7 +4,7 @@
  * softdev July 2006
  * crunchy2 May 2007-July 2007
  * Michniewski 2008
- * Tantric 2008-2022
+ * Tantric 2008-2023
  *
  * snes9xgx.h
  *
@@ -20,7 +20,7 @@
 #include "filelist.h"
 
 #define APPNAME 			"Snes9x GX"
-#define APPVERSION 			"4.5.3"
+#define APPVERSION 			"4.5.4"
 #define APPFOLDER 			"snes9xgx"
 #define PREF_FILE_NAME		"settings.xml"
 
@@ -133,12 +133,13 @@ struct SGCSettings{
 
 	float	zoomHor; // horizontal zoom amount
 	float	zoomVert; // vertical zoom amount
-	int		videomode; // 0 - automatic, 1 - NTSC (480i), 2 - Progressive (480p), 3 - PAL (50Hz), 4 - PAL (60Hz)
+	int		videomode; // 0 - Automatic, 1 - NTSC (480i), 2 - Progressive (480p), 3 - PAL (50Hz), 4 - PAL (60Hz), 5 - Progressive (576p)
 	int		render;		// 0 - original, 1 - filtered, 2 - unfiltered
 	int		FilterMethod; // convert to RenderFilter
 	int		Controller;
 	int		HiResolution;
 	int		SpriteLimit;
+	int		FrameSkip;
 	int		crosshair;
 	int		widescreen;	// 0 - 4:3 aspect, 1 - 16:9 aspect
 	int		xshift;	// video output shift

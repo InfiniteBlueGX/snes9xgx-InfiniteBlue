@@ -563,8 +563,9 @@ void S9xSetSA1 (uint8 byte, uint32 address)
 					{
 						int16 dividend = (int16) SA1.op1;
 						uint16 divisor = (uint16) SA1.op2;
-						uint16	remainder = (dividend >= 0) ? dividend % divisor : (dividend % divisor) + divisor;
-						uint16	quotient  = (dividend - remainder) / divisor;
+						uint32 dividend_ext = dividend + (uint32)divisor * 65536;
+						uint16 remainder = dividend_ext % divisor;
+						uint16 quotient = dividend_ext / divisor;
 						SA1.sum = (remainder << 16) | quotient;
 					}
 
@@ -785,7 +786,7 @@ uint8 S9xSA1GetByte (uint32 address)
 
 		case CMemory::MAP_BWRAM_BITMAP:
 			SA1.Cycles += ONE_CYCLE * 2;
-			
+
 			address -= 0x600000;
 			if (SA1.VirtualBitmapFormat == 2)
 				return ((Memory.SRAM[(address >> 2) & 0x3ffff] >> ((address & 3) << 1)) &  3);
@@ -794,7 +795,7 @@ uint8 S9xSA1GetByte (uint32 address)
 
 		case CMemory::MAP_BWRAM_BITMAP2:
 			SA1.Cycles += ONE_CYCLE * 2;
-			
+
 			address = (address & 0xffff) - 0x6000;
 			if (SA1.VirtualBitmapFormat == 2)
 				return ((SA1.BWRAM[(address >> 2) & 0x3ffff] >> ((address & 3) << 1)) &  3);
